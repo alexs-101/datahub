@@ -1,0 +1,112 @@
+[
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:_CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "PATCH",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": [
+            {
+                "op": "add",
+                "path": "/description",
+                "value": "Changed description: Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI."
+            },
+            {
+                "op": "add",
+                "path": "/name",
+                "value": "CommonCoreOrder"
+            },
+            {
+                "op": "add",
+                "path": "/assets",
+                "value": [
+                    {
+                        "destinationUrn": "urn:li:dataset:(urn:li:dataPlatform:Databricks,prod_data_catalog.common_core.order,PROD)",
+                        "created": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "yaml"
+                        }
+                    }
+                ]
+            },
+            {
+                "op": "add",
+                "path": "/customProperties",
+                "value": {
+                    "dataProductId": "https://dataproducts.exactsciences.com/CommonCore/Domestic/CommonCoreOrder",
+                    "name": "CommonCoreOrder",
+                    "description": "Changed description: Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI.",
+                    "version": "1.0",
+                    "domain": "CommonCore",
+                    "dataAlignmentType": "consumer-aligned",
+                    "sourceSystems": "Epic, PO SFDC, EU SFDC, PG LIMs, SLIMS",
+                    "processing": "batch",
+                    "framework": "Databricks",
+                    "dataContract": "https://path.to/data-contracts/CommonCore/OrderContract.yaml",
+                    "SLAs": "3-hour data refresh",
+                    "useCases": "DataAnalysis, ExecutiveReporting",
+                    "subjectMatterExperts": "avernon@exactsciences.com",
+                    "countryOfOrigin": "Domestic, EU",
+                    "dataClassification": "Internal",
+                    "complianceRequirements": "HIPPA",
+                    "acceptableUse": "Research and Clinical Operations only",
+                    "createdBy": "CommonCoreTeam",
+                    "lastModified": "2023-03-15T10:00:00Z",
+                    "updateFrequency": "Hourly"
+                }
+            },
+            {
+                "op": "add",
+                "path": "/externalUrl",
+                "value": "https://dataproducts.exactsciences.com/CommonCore/Domestic/CommonCoreOrder"
+            }
+        ]
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:_CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:_CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "ownership",
+    "aspect": {
+        "json": {
+            "owners": [
+                {
+                    "owner": "urn:li:corpuser:avernon@exactsciences.com",
+                    "type": "TECHNICAL_OWNER"
+                }
+            ],
+            "ownerTypes": {},
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            }
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:_CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "status",
+    "aspect": {
+        "json": {
+            "removed": false
+        }
+    }
+}
+]

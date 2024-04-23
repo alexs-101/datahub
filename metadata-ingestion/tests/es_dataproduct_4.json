@@ -1,0 +1,142 @@
+{
+  "dataProductId": "https://dataproducts.exactsciences.com/MCED/SV/ResultsDataProduct_236r53485",
+  "name": "MCED SV Results (RENAMED)",
+  "description": "**DEMO (changed description)**\n\n**Cancerguard\u2122**\r\n\r\nAt Exact Sciences, we\u2019re pioneering a paradigm shift in cancer detection. The Cancerguard\u2122 test in development is being designed to detect multiple cancers in their earliest stages from a single blood draw.1\u00A0So we can start to close the gaps that exist in today\u2019s cancer screening.\r\n\r\nBecause if we can detect cancer early, we may be able to stay one step ahead of it.2,3\r\n\r\n**View our latest MCED thought leader feature on Emerging Strategies in Multi-Cancer Early Detection**\r\n\r\n&nbsp;\r\n\r\n[https:\/\/www.exactsciences.com\/Pipeline-and-Data\/cancerguard](https:\/\/www.exactsciences.com\/Pipeline-and-Data\/cancerguard)\r\n\r\n&nbsp;\r\n\r\n**The Cancerguard\u2122 test is under development. The features above describe current development goals. It has not been cleared or approved by the US Food and Drug Administration or any other national regulatory authority.**\r\n\r\n* * *\r\n\r\n**References**\r\n\r\n1.  Ahlquist DA. Universal cancer screening: revolutionary, rational, and realizable.\u00A0_NPJ Precis Oncol_. 2018;2:23.\r\n    \r\n2.  Siegel RL, Giaquinto AN, Jemal A. Cancer statistics, 2024.\u00A0_CA Cancer J Clin_. 2024; doi:10.3322\/caac.21820\r\n    \r\n3.  Douville C, Nobles C, Hwang HJ, et al. Multi-cancer early detection through evaluation of aneuploidy, methylation, and protein biomarkers in plasma. Poster presented at: ESMO Congress; September 9-13, 2022; Paris, France. Abstract 73P.",
+  "version": "1.0",
+  "domain": "CommonCore",
+  "dataAlignmentType": "consumer-aligned",
+  "sourceSystems": [
+    "Epic",
+    "PO SFDC",
+    "EU SFDC",
+    "PG LIMs",
+    "SLIMS"
+  ],
+  "processing": "batch",
+  "framework": "Databricks",
+  "dataContract": "https://path.to/data-contracts/CommonCore/OrderContract.yaml",
+  "SLAs": "3-minutes data refresh (demo)",
+  "useCases": [
+    "DataAnalysis",
+    "ExecutiveReporting"
+  ],
+  "subjectMatterExperts": [
+    "avernon@exactsciences.com"
+  ],
+  "countryOfOrigin": [
+    "Domestic",
+    "EU"
+  ],
+  "dataClassification": "Internal",
+  "complianceRequirements": [
+    "HIPPA"
+  ],
+  "acceptableUse": "Research and Clinical Operations only",
+  "createdBy": "CommonCoreTeam",
+  "lastModified": "2023-03-15T10:00:00Z",
+  "updateFrequency": "Hourly",
+  "schema": {
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "description": "The unique Common Core identifier for the order."
+      },
+      "mastered_state": {
+        "type": "string",
+        "description": "Indicates whether an order record is mastered, unmastered, or part of a group comprised of a single record."
+      },
+      "ordering_hco_id": {
+        "type": "string",
+        "description": "The identifier linking the order to a submitter record."
+      },
+      "ordering_hcp_id": {
+        "type": "string",
+        "description": "The identifier linking the order to a provider record."
+      },
+      "demo_property": {
+        "type": "bool",
+        "description": "Just ingested property."
+      }
+    },
+    "x-context": {
+      "id": {
+        "propertyUri": "https://properties.exactsciences.com/CommonCore/OrderId",
+        "relationType": "Id",
+        "required": true,
+        "isPrimaryId": true
+      },
+      "mastered_state": {
+        "propertyUri": "https://properties.exactsciences.com/CommonCore/MasteredState",
+        "required": true
+      },
+      "ordering_hco_id": {
+        "propertyUri": "https://properties.exactsciences.com/CommonCore/HCOID",
+        "relationType": "ReferenceId",
+        "primaryDataProducts": [
+          {
+            "dataProductId": "https://dataproducts.exactsciences.com/CommonCore/HCO",
+            "cardinality": "many_to_one"
+          }
+        ]
+      },
+      "ordering_hcp_id": {
+        "propertyUri": "https://properties.exactsciences.com/CommonCore/ProviderID",
+        "relationType": "ReferenceId",
+        "primaryDataProducts": [
+          {
+            "dataProductId": "https://dataproducts.exactsciences.com/CommonCore/Provider",
+            "cardinality": "many_to_one"
+          }
+        ]
+      },
+      "demo_property": {
+        "propertyUri": "https://properties.exactsciences.com/SOME/DEMO/PROPERTY",
+        "required": true
+      }
+    }
+  },
+  "outputPorts": [
+    {
+      "type": "UNITY_CATALOG",
+      "description": "Databricks Unity Catalog output",
+      "details": {
+        "catalog": "prod_data_catalog",
+        "schema": "raw_usldt_starlims",
+        "table": "ghi_inventory",
+        "env": "prod"
+      }
+    },
+    {
+      "type": "UNITY_CATALOG",
+      "description": "Databricks Unity Catalog output",
+      "details": {
+        "catalog": "prod_data_catalog",
+        "schema": "raw_usldt_starlims",
+        "table": "ghi_srv_batch_equip",
+        "env": "prod"
+      }
+    },
+    {
+      "type": "UNITY_CATALOG",
+      "description": "Databricks Unity Catalog output",
+      "details": {
+        "catalog": "prod_data_catalog",
+        "schema": "raw_usldt_starlims",
+        "table": "inventory_transactions",
+        "env": "prod"
+      }
+    },
+    {
+      "type": "UNITY_CATALOG",
+      "description": "Databricks Unity Catalog output",
+      "details": {
+        "catalog": "prod_data_catalog",
+        "schema": "raw_usldt_starlims",
+        "table": "ghi_path_events",
+        "env": "prod"
+      }
+    }
+  ]
+}

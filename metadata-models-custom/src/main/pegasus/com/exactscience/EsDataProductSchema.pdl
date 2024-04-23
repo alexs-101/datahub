@@ -1,0 +1,14 @@
+namespace com.exactscience
+
+@Aspect = {
+  "name": "esDataProductSchema",
+  "autoRender": true,
+  "renderSpec": {
+    "displayType": "tabular", // or properties
+    "key": "esDataProductSchemaProperties",
+    "displayName": "Exact Science Schema"
+  }
+}
+record EsDataProductSchema {
+  esDataProductSchemaProperties: array[EsDataProductSchemaProperty]
+}

@@ -27,6 +27,7 @@ from datahub.cli.migrate import migrate
 from datahub.cli.put_cli import put
 from datahub.cli.specific.datacontract_cli import datacontract
 from datahub.cli.specific.dataproduct_cli import dataproduct
+from datahub.cli.specific.es_dataproduct_cli import es_dataproduct
 from datahub.cli.specific.dataset_cli import dataset
 from datahub.cli.specific.forms_cli import forms
 from datahub.cli.specific.group_cli import group
@@ -160,6 +161,7 @@ datahub.add_command(timeline)
 datahub.add_command(user)
 datahub.add_command(group)
 datahub.add_command(dataproduct)
+datahub.add_command(es_dataproduct)
 datahub.add_command(dataset)
 datahub.add_command(properties)
 datahub.add_command(forms)

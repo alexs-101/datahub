@@ -1,0 +1,13 @@
+namespace com.exactscience
+
+record EsDataProductSchemaProperty {
+  name: string
+  description: string
+  type: string
+  propertyUri: string
+  relationType: string
+  required: boolean
+  isPrimaryId: boolean
+  complianceRequirements: string
+  transformations: string
+}
