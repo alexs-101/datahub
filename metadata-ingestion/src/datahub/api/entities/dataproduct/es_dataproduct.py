@@ -1,11 +1,15 @@
 from __future__ import annotations
 import json
+import time
 import re
 from typing import Optional, Union, List, Dict
 from pathlib import Path
 from datahub.api.entities.dataproduct.dataproduct import DataProduct
 from datahub.cli.specific.file_loader import load_file
 from pydantic import BaseModel, Field
+from datahub.ingestion.graph.client import DataHubGraph
+from datahub.utilities.registries.domain_registry import DomainRegistry
+from datahub.metadata.com.linkedin.pegasus2avro.schema import SchemaFieldDataType, NullTypeClass
 from datahub.emitter.mce_builder import (
     make_data_platform_urn,
     make_dataset_urn,
@@ -23,20 +27,36 @@ from typing import Iterable, Union
 from datahub.specific.dataproduct import DataProductPatchBuilder
 from datahub.emitter.mcp import MetadataChangeProposalWrapper
 from datahub.metadata.schema_classes import (
-    DataProductAssociationClass as DataProductAssociation,
-    DataProductPropertiesClass as DataProductProperties,
-    GlobalTagsClass as GlobalTags,
-    GlossaryTermAssociationClass as Term,
-    GlossaryTermsClass as GlossaryTerms,
+    MetadataChangeEventClass,
+    DataProductAssociationClass,
+    DataProductPropertiesClass,
+    DatasetPropertiesClass,
+    DomainPropertiesClass,
+    DomainsClass,
+    GlobalTagsClass,
+    OwnershipClass,
+    GlossaryTermAssociationClass,
+    GlossaryTermsClass,
+    GlossaryTermSnapshotClass,
+    GlossaryTermKeyClass,
+    GlossaryTermInfoClass,
+    BrowsePathsClass,
+    InstitutionalMemoryClass,
     MetadataChangeProposalClass,
     KafkaAuditHeaderClass,
-    OwnerClass as Owner,
+    OwnerClass,
     OwnershipTypeClass,
     SystemMetadataClass,
-    TagAssociationClass as Tag,
+    TagAssociationClass,
+    SchemaMetadataClass,
+    SchemaFieldClass,
+    OtherSchemaClass,
     ChangeTypeClass,
-    GenericAspectClass
+    StatusClass,
+    GenericAspectClass,
+    AuditStampClass,
 )
+from datahub.ingestion.graph.client import DataHubGraph, get_default_graph
 
 
 class _EsOutputPortsDetails(BaseModel):
@@ -57,6 +77,12 @@ class _EsOutputPorts(BaseModel):
     description: str
     details: _EsOutputPortsDetails
 
+    def get_fully_qualified_name(self):
+        return f"{self.details.catalog}.{self.details.schema_}.{self.details.table}"
+    
+    def get_urn(self):
+        return make_dataset_urn("databricks", self.get_fully_qualified_name(), self.details.env)
+
 
 class _EsSchemaProperty(BaseModel):
     class Config:
@@ -64,6 +90,46 @@ class _EsSchemaProperty(BaseModel):
 
     type: str = Field(default = "", alias='type')
     description: str = Field(default = "", alias='description')
+
+
+class EsSchemaProperty(BaseModel):
+    class Config:
+        allow_population_by_field_name = True
+
+    name: str = Field(default = "", alias='name')
+    description: str = Field(default = "", alias='description')
+    type: str = Field(default = "", alias='type')
+    property_uri: str = Field(default="", alias='propertyUri')
+    relation_type: str = Field(default="", alias='relationType')
+    required: bool = Field(default=False, alias='required')
+    is_primary_id: bool = Field(default=False, alias='isPrimaryId')
+    compliance_requirements: str = Field(default_factory = list,alias='complianceRequirements')
+    transformations: str = Field(default_factory = list, alias='transformations')
+
+    def get_term(self):
+        try:
+            tmp = urlparse(self.property_uri).path.strip("/")
+        except ValueError:
+            tmp = self.property_uri
+
+        return tmp
+
+    def get_term_name(self):
+        return self.get_term().split("/")[-1]
+
+    def get_term_browse_path(self):
+        return self.get_term().split("/")[:-1]
+
+    def get_term(self):
+        try:
+            tmp = urlparse(self.property_uri).path.strip("/")
+        except ValueError:
+            tmp = self.property_uri
+
+        return tmp
+
+    def get_term_urn(self):
+        return make_term_urn(self.get_term().replace("/", "_"))
 
 
 class _EsSchemaXProperty(BaseModel):
@@ -114,26 +180,20 @@ class _EsDataProduct(BaseModel):
     schema_: _EsSchema = Field(default = _EsSchema, alias='schema')
 
     
-    def get_data_product_external_url(self):
-        try:
-            urlparse(self.data_product_id)
-            return self.data_product_id
-        except ValueError:
-            return ""
-    
-    
-    def get_data_product_id(self):
+    def get_data_product_urn(self):
         try:
             tmp = urlparse(self.data_product_id).path.strip("/")
         except ValueError:
             tmp = self.data_product_id
 
-        return re.sub(r"\W+", "_", tmp)
+        tmp = re.sub(r"\W+", "_", tmp)
+
+        return f"urn:li:dataProduct:{tmp}"
     
     
-    def get_data_product_assets(self):
+    def get_data_product_dataset_urns(self):
         return [
-            make_dataset_urn("databricks", f"{op.details.catalog}.{op.details.schema_}.{op.details.table}", op.details.env)
+            op.get_urn()
             for op in self.output_ports
         ]
 
@@ -146,8 +206,11 @@ class _EsDataProduct(BaseModel):
         return self.description
     
 
+    def get_data_product_domain_urn(self):
+        return make_domain_urn(self.get_data_product_domain())
+    
     def get_data_product_domain(self):
-        return make_domain_urn(self.domain)
+        return self.domain
     
 
     def get_data_product_owners(self):
@@ -157,109 +220,189 @@ class _EsDataProduct(BaseModel):
         ]
 
 
-    def get_data_product_schema_properties(self):
+    def get_data_product_schema_properties(self) -> List[EsSchemaProperty]:
+        def __to_dict(v: BaseModel) -> dict:
+            return { 
+                k1: str(v1) 
+                for k1, v1 in v.dict(by_alias=True).items()
+            }
+
         return [
-            EsDataProductSchemaProperty(
-                name=k,
-                description=v.description,
-                type=v.type,
-                property_uri=self.schema_.x_context[k].property_uri,
-                relation_type=self.schema_.x_context[k].relation_type,
-                required=self.schema_.x_context[k].required,
-                is_primary_id=self.schema_.x_context[k].is_primary_id,
-                compliance_requirements=self.array_to_str(self.schema_.x_context[k].compliance_requirements),
-                transformations=self.array_to_str(self.schema_.x_context[k].transformations)
+            EsSchemaProperty(
+                name = name,
+                **__to_dict(v),
+                **__to_dict(self.schema_.x_context[name])
             )
-            for k, v in self.schema_.properties.items()
+            for name, v in self.schema_.properties.items()
         ]
-    
 
-    @classmethod
-    def array_to_str(cls, a: List[str]):
-        return ', '.join(a)
-
-
-class EsDataProductSchemaProperty(BaseModel):
-    class Config:
-        allow_population_by_field_name = True
-
-    name: str = Field(default = "", alias='name')
-    description: str = Field(default = "", alias='description')
-    type: str = Field(default = "", alias='type')
-    property_uri: str = Field(default="", alias='propertyUri')
-    relation_type: str = Field(default="", alias='relationType')
-    required: bool = Field(default=False, alias='required')
-    is_primary_id: bool = Field(default=False, alias='isPrimaryId')
-    compliance_requirements: str = Field(default_factory = list,alias='complianceRequirements')
-    transformations: str = Field(default_factory = list, alias='transformations')
+    def get_data_product_schema_properties_patched(self) -> List[EsSchemaProperty]:
+        for p in self.get_data_product_schema_properties():
+            yield p.copy(update = { "propertyUri": f"http://localhost:9002/glossaryTerm/{p.get_term_urn()}" })
 
 
-class EsDataProduct(DataProduct):
-    schema_: Optional[List[EsDataProductSchemaProperty]] = None
-
-    @classmethod
-    def from_es_json(cls, file: Path) -> EsDataProduct:
-        
-        es_data_product = _EsDataProduct.parse_obj(load_file(file))
-
-        return EsDataProduct(
-            id = es_data_product.get_data_product_id(),
-            
-            domain = es_data_product.get_data_product_domain(), # emmit if not emmitted?
-            
-            assets = es_data_product.get_data_product_assets(), # emmit if not emmitted?
-            display_name = es_data_product.get_data_product_display_name(),
-            
-            owners = es_data_product.get_data_product_owners(), # emmit if not emmitted?
-
-            description = es_data_product.get_data_product_description(),
-            tags = [],
-            terms = [],
-            properties = {
-                "dataProductId": es_data_product.data_product_id,
-                "name": es_data_product.name,
-                "description": es_data_product.description,
-                "version": es_data_product.version,
-                "domain": es_data_product.domain,
-                "dataAlignmentType": es_data_product.data_alignment_type,
-                "sourceSystems": _EsDataProduct.array_to_str(es_data_product.source_systems),
-                "processing": es_data_product.processing,
-                "framework": es_data_product.framework,
-                "dataContract": es_data_product.data_contract,
-                "SLAs": es_data_product.slas,
-                "useCases": _EsDataProduct.array_to_str(es_data_product.use_cases),
-                "subjectMatterExperts": _EsDataProduct.array_to_str(es_data_product.subject_matter_experts),
-                "countryOfOrigin": _EsDataProduct.array_to_str(es_data_product.country_of_origin),
-                "dataClassification": es_data_product.data_classification,
-                "complianceRequirements" : _EsDataProduct.array_to_str(es_data_product.compliance_requirements),
-                "acceptableUse": es_data_product.acceptable_use,
-                "createdBy": es_data_product.created_by,
-                "lastModified": es_data_product.last_modified,
-                "updateFrequency": es_data_product.update_frequency
-            },
-            external_url = es_data_product.get_data_product_external_url(),
-            schema_=es_data_product.get_data_product_schema_properties()
-        )
-    
-    def generate_mcp(
-        self, upsert: bool
-    ) -> Iterable[Union[MetadataChangeProposalWrapper, MetadataChangeProposalClass]]:
-        yield from super().generate_mcp(upsert)
-        yield from self.generate_es_mcp(upsert)
-
-    def generate_es_mcp(
-        self, upsert: bool
-    ) -> Iterable[Union[MetadataChangeProposalWrapper, MetadataChangeProposalClass]]:
-        es_data_product_schema_properties = {
-            "esDataProductSchemaProperties": [sp.dict(by_alias = True) for sp in self.schema_]
+    def get_data_product_custom_properties(self):
+        return { 
+            k: str(v) 
+            for k, v in self.dict(by_alias=True).items()
+                if k not in ["schema", "outputPorts", "dataProductId"]
         }
+
+
+    def _mint_auditstamp(self, message: str) -> AuditStampClass:
+        return AuditStampClass(
+            time=int(time.time() * 1000.0),
+            actor="urn:li:corpuser:datahub",
+            message=message,
+        )
+
+
+    @classmethod
+    def load_from_json(cls, file: Path) -> _EsDataProduct:
+        return _EsDataProduct.parse_obj(load_file(file))
+
+
+    def generate_mcp(
+        self,
+        graph: DataHubGraph
+    ) -> Iterable[Union[MetadataChangeProposalWrapper, MetadataChangeProposalClass]]:
+        
+        yield from self.generate_domain_mcp_if_not_exists(graph)
+        yield from self.generate_datasets_mcps_if_not_exists(graph)
+        
+        yield MetadataChangeProposalWrapper(
+            entityUrn=self.get_data_product_urn(),
+            aspect=DataProductPropertiesClass(
+                name=self.get_data_product_display_name(),
+                description=self.get_data_product_description(),
+                assets=[
+                    DataProductAssociationClass(
+                        destinationUrn=asset,
+                    )
+                    for asset in self.get_data_product_dataset_urns()
+                ],
+                customProperties=self.get_data_product_custom_properties(),
+                externalUrl=None,
+            ),
+        )
+        
+        yield MetadataChangeProposalWrapper(
+            entityUrn=self.get_data_product_urn(),
+            aspect=DomainsClass(
+                domains=[self.get_data_product_domain_urn()] # TODO: resolve it first
+            ),
+        )
+
+        yield MetadataChangeProposalWrapper(
+            entityUrn=self.get_data_product_urn(),
+            aspect=OwnershipClass(
+                owners=[
+                    OwnerClass(
+                        owner=make_user_urn(o),
+                        type=OwnershipTypeClass.BUSINESS_OWNER
+                    ) 
+                    for o in self.get_data_product_owners()
+                ]
+            ),
+        )
+
+        yield MetadataChangeProposalWrapper(
+            entityUrn=self.get_data_product_urn(), 
+            aspect=StatusClass(removed=False)
+        )
+
         yield MetadataChangeProposalClass(
             entityType="dataProduct",
-            entityUrn=self.urn,
+            entityUrn=self.get_data_product_urn(),
             changeType=ChangeTypeClass.UPSERT,
             aspectName="esDataProductSchema",
             aspect=GenericAspectClass(
                 contentType="application/json",
-                value=json.dumps(es_data_product_schema_properties).encode("utf-8"),
+                value=json.dumps(
+                    {
+                        "esDataProductSchemaProperties":
+                            [p.dict(by_alias=True) for p in self.get_data_product_schema_properties_patched()]
+                    }
+                ).encode("utf-8"),
             ),
         )
+
+
+    def generate_domain_mcp_if_not_exists(self, graph: DataHubGraph):
+        domain_urn = self.get_data_product_domain_urn()
+        if not graph.exists(domain_urn):
+            yield MetadataChangeProposalWrapper(
+                entityUrn=domain_urn,
+                aspect=DomainPropertiesClass(
+                    name = self.get_data_product_domain()
+                ),
+            )
+
+
+    def generate_datasets_mcps_if_not_exists(self, graph: DataHubGraph):
+        
+        for dataset in self.output_ports:
+            dataset_urn = dataset.get_urn()
+            if not graph.exists(dataset_urn):
+                yield MetadataChangeProposalWrapper(
+                    entityUrn=dataset_urn,
+                    aspect=DatasetPropertiesClass(
+                        name=dataset.get_fully_qualified_name(),
+                        customProperties=self.get_data_product_custom_properties()
+                    )
+                )
+
+
+                yield MetadataChangeProposalWrapper(
+                    entityUrn=dataset_urn, 
+                    aspect=SchemaMetadataClass(
+                        schemaName=f"schema_{dataset.get_fully_qualified_name()}",
+                        platform=make_data_platform_urn("databricks"),
+                        version=0,
+                        hash="",
+                        platformSchema=OtherSchemaClass(rawSchema=""),
+                        fields=[
+                            SchemaFieldClass(
+                                fieldPath=prop.name,
+                                type=SchemaFieldDataType(type=NullTypeClass()),
+                                description="",
+                                nativeDataType=prop.type,
+                                glossaryTerms= GlossaryTermsClass(
+                                    terms = [
+                                        GlossaryTermAssociationClass(
+                                            urn=prop.get_term_urn()
+                                        )
+                                    ],
+                                    auditStamp=self._mint_auditstamp("json")                                
+                                )
+                            )
+                            for prop in self.get_data_product_schema_properties()
+                        ]
+                    )
+                )
+
+        for prop in self.get_data_product_schema_properties():
+            term = prop.get_term_name()
+            term_urn = prop.get_term_urn()
+            if not graph.exists(term_urn):
+
+                yield MetadataChangeEventClass(
+                    proposedSnapshot=GlossaryTermSnapshotClass(
+                        urn=term_urn, 
+                        aspects=[
+                            GlossaryTermInfoClass(
+                                name = term,
+                                definition = "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                                termSource = "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                            ),
+                            BrowsePathsClass(paths = prop.get_term_browse_path())
+                        ]
+                    )     
+                )
+
+                yield MetadataChangeProposalWrapper(
+                    entityUrn=term_urn,
+                    aspect=DomainsClass(
+                        domains=[self.get_data_product_domain_urn()] # TODO: resolve it first
+                    )
+                )
