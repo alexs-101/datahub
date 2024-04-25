@@ -1,0 +1,1192 @@
+[
+{
+    "entityType": "domain",
+    "entityUrn": "urn:li:domain:CommonCore",
+    "changeType": "UPSERT",
+    "aspectName": "domainProperties",
+    "aspect": {
+        "json": {
+            "name": "CommonCore"
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:databricks,prod_data_catalog.common_core.order,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "datasetProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "name": "CommonCoreOrder",
+                "description": "Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI.",
+                "version": "1.0",
+                "domain": "CommonCore",
+                "dataAlignmentType": "consumer-aligned",
+                "sourceSystems": "['Epic', 'PO SFDC', 'EU SFDC', 'PG LIMs', 'SLIMS']",
+                "processing": "batch",
+                "framework": "Databricks",
+                "dataContract": "https://path.to/data-contracts/CommonCore/OrderContract.yaml",
+                "SLAs": "3-hour data refresh",
+                "useCases": "['DataAnalysis', 'ExecutiveReporting']",
+                "subjectMatterExperts": "['avernon@exactsciences.com']",
+                "countryOfOrigin": "['Domestic', 'EU']",
+                "dataClassification": "Internal",
+                "complianceRequirements": "['HIPPA']",
+                "acceptableUse": "Research and Clinical Operations only",
+                "createdBy": "CommonCoreTeam",
+                "lastModified": "2023-03-15T10:00:00Z",
+                "updateFrequency": "Hourly"
+            },
+            "name": "prod_data_catalog.common_core.order",
+            "tags": []
+        }
+    }
+},
+{
+    "entityType": "dataset",
+    "entityUrn": "urn:li:dataset:(urn:li:dataPlatform:databricks,prod_data_catalog.common_core.order,PROD)",
+    "changeType": "UPSERT",
+    "aspectName": "schemaMetadata",
+    "aspect": {
+        "json": {
+            "schemaName": "schema_prod_data_catalog.common_core.order",
+            "platform": "urn:li:dataPlatform:databricks",
+            "version": 0,
+            "created": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            },
+            "hash": "",
+            "platformSchema": {
+                "com.linkedin.schema.OtherSchema": {
+                    "rawSchema": ""
+                }
+            },
+            "fields": [
+                {
+                    "fieldPath": "id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_OrderId"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "mastered_state",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_MasteredState"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "ordering_hco_id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_HCOID"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "ordering_hcp_id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_ProviderID"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "patient_id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_PatientId"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "product_id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_ProductId"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "project_id",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_ProjectId"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "order_source",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_OrderSource"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "order_start_date",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "date",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_OrderStartDate"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "order_status",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "string",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_OrderStatus"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "is_reorder",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "boolean",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_IsReorder"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "is_bulk_order",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "boolean",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_IsBulkOrder"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "cc_created_on",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "datetime",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_CreatedOn"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                },
+                {
+                    "fieldPath": "cc_modified_on",
+                    "nullable": false,
+                    "description": "",
+                    "type": {
+                        "type": {
+                            "com.linkedin.schema.NullType": {}
+                        }
+                    },
+                    "nativeDataType": "datetime",
+                    "recursive": false,
+                    "glossaryTerms": {
+                        "terms": [
+                            {
+                                "urn": "urn:li:glossaryTerm:CommonCore_ModifiedOn"
+                            }
+                        ],
+                        "auditStamp": {
+                            "time": 1681455600000,
+                            "actor": "urn:li:corpuser:datahub",
+                            "message": "json"
+                        }
+                    },
+                    "isPartOfKey": false
+                }
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_OrderId",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "OrderId",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_OrderId",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_MasteredState",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "MasteredState",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_MasteredState",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_HCOID",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "HCOID",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_HCOID",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_ProviderID",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "ProviderID",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_ProviderID",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_PatientId",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "PatientId",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_PatientId",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_ProductId",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "ProductId",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_ProductId",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_ProjectId",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "ProjectId",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_ProjectId",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_OrderSource",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "OrderSource",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_OrderSource",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_OrderStartDate",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "OrderStartDate",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_OrderStartDate",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_OrderStatus",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "OrderStatus",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_OrderStatus",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_IsReorder",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "IsReorder",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_IsReorder",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_IsBulkOrder",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "IsBulkOrder",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_IsBulkOrder",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_CreatedOn",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "CreatedOn",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_CreatedOn",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "proposedSnapshot": {
+        "com.linkedin.pegasus2avro.metadata.snapshot.GlossaryTermSnapshot": {
+            "urn": "urn:li:glossaryTerm:CommonCore_ModifiedOn",
+            "aspects": [
+                {
+                    "com.linkedin.pegasus2avro.glossary.GlossaryTermInfo": {
+                        "customProperties": {},
+                        "name": "ModifiedOn",
+                        "definition": "*PUT THE DEFINITION HERE*, **you can use** MD markup language",
+                        "termSource": "*PUT THE DEFINITION HERE*, **you can use** MD markup language"
+                    }
+                },
+                {
+                    "com.linkedin.pegasus2avro.common.BrowsePaths": {
+                        "paths": [
+                            "CommonCore"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "glossaryTerm",
+    "entityUrn": "urn:li:glossaryTerm:CommonCore_ModifiedOn",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "dataProductProperties",
+    "aspect": {
+        "json": {
+            "customProperties": {
+                "name": "CommonCoreOrder",
+                "description": "Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI.",
+                "version": "1.0",
+                "domain": "CommonCore",
+                "dataAlignmentType": "consumer-aligned",
+                "sourceSystems": "['Epic', 'PO SFDC', 'EU SFDC', 'PG LIMs', 'SLIMS']",
+                "processing": "batch",
+                "framework": "Databricks",
+                "dataContract": "https://path.to/data-contracts/CommonCore/OrderContract.yaml",
+                "SLAs": "3-hour data refresh",
+                "useCases": "['DataAnalysis', 'ExecutiveReporting']",
+                "subjectMatterExperts": "['avernon@exactsciences.com']",
+                "countryOfOrigin": "['Domestic', 'EU']",
+                "dataClassification": "Internal",
+                "complianceRequirements": "['HIPPA']",
+                "acceptableUse": "Research and Clinical Operations only",
+                "createdBy": "CommonCoreTeam",
+                "lastModified": "2023-03-15T10:00:00Z",
+                "updateFrequency": "Hourly"
+            },
+            "name": "CommonCoreOrder",
+            "description": "Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI.",
+            "assets": [
+                {
+                    "destinationUrn": "urn:li:dataset:(urn:li:dataPlatform:databricks,prod_data_catalog.common_core.order,PROD)"
+                }
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "domains",
+    "aspect": {
+        "json": {
+            "domains": [
+                "urn:li:domain:CommonCore"
+            ]
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "ownership",
+    "aspect": {
+        "json": {
+            "owners": [
+                {
+                    "owner": "urn:li:corpuser:avernon@exactsciences.com",
+                    "type": "BUSINESS_OWNER"
+                }
+            ],
+            "ownerTypes": {},
+            "lastModified": {
+                "time": 0,
+                "actor": "urn:li:corpuser:unknown"
+            }
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "status",
+    "aspect": {
+        "json": {
+            "removed": false
+        }
+    }
+},
+{
+    "entityType": "dataProduct",
+    "entityUrn": "urn:li:dataProduct:CommonCore_Domestic_CommonCoreOrder",
+    "changeType": "UPSERT",
+    "aspectName": "esDataProductSchema",
+    "aspect": {
+        "json": {
+            "esDataProductSchemaProperties": [
+                {
+                    "name": "id",
+                    "description": "The unique Common Core identifier for the order.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_OrderId",
+                    "relationType": "Id",
+                    "required": true,
+                    "isPrimaryId": true,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "mastered_state",
+                    "description": "Indicates whether an order record is mastered, unmastered, or part of a group comprised of a single record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_MasteredState",
+                    "relationType": "",
+                    "required": true,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "ordering_hco_id",
+                    "description": "The identifier linking the order to a submitter record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_HCOID",
+                    "relationType": "ReferenceId",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "ordering_hcp_id",
+                    "description": "The identifier linking the order to a provider record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_ProviderID",
+                    "relationType": "ReferenceId",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "patient_id",
+                    "description": "The identifier linking the order to a patient record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_PatientId",
+                    "relationType": "ReferenceId",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "product_id",
+                    "description": "The identifier linking the order to a product record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_ProductId",
+                    "relationType": "ReferenceId",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "project_id",
+                    "description": "The identifier linking the order to a special project or study record.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_ProjectId",
+                    "relationType": "ReferenceId",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "order_source",
+                    "description": "The method by which the order was received from the source system.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_OrderSource",
+                    "relationType": "",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "order_start_date",
+                    "description": "The date the order was received.",
+                    "type": "date",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_OrderStartDate",
+                    "relationType": "",
+                    "required": true,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "order_status",
+                    "description": "The status of the order in the source system. This data is normalized based on data in ref_order_status.",
+                    "type": "string",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_OrderStatus",
+                    "relationType": "",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "is_reorder",
+                    "description": "A boolean value used to indicate whether an order is a reorder.  Reorders do not generate revenue.",
+                    "type": "boolean",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_IsReorder",
+                    "relationType": "",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "is_bulk_order",
+                    "description": "A boolean value used to indicate whether an order is part of a bulk order.",
+                    "type": "boolean",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_IsBulkOrder",
+                    "relationType": "",
+                    "required": false,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "cc_created_on",
+                    "description": "The date the order record was created in Common Core.",
+                    "type": "datetime",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_CreatedOn",
+                    "relationType": "",
+                    "required": true,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                },
+                {
+                    "name": "cc_modified_on",
+                    "description": "The date the order record was last modified in Common Core.",
+                    "type": "datetime",
+                    "propertyUri": "http://localhost:9002/glossaryTerm/urn:li:glossaryTerm:CommonCore_ModifiedOn",
+                    "relationType": "",
+                    "required": true,
+                    "isPrimaryId": false,
+                    "complianceRequirements": "[]",
+                    "transformations": "[]"
+                }
+            ]
+        }
+    }
+}
+]

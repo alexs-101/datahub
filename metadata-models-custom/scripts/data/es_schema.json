@@ -1,0 +1,44 @@
+{
+  "properties": [
+    {
+      "name": "patient_id",
+      "type": "string",
+      "propertyUri": "https://properties.exactsciences.com/CommonCore/PatientId",
+      "relationType": "ReferenceId",
+      "required": true,
+      "isPrimaryId": false
+    },
+    {
+      "name": "ordering_hco_id",
+      "type": "string",
+      "propertyUri": "https://properties.exactsciences.com/CommonCore/HCOID",
+      "relationType": "ReferenceId",
+      "required": true,
+      "isPrimaryId": false
+    },
+    {
+      "name": "ordering_hcp_id",
+      "type": "string",
+      "propertyUri": "https://properties.exactsciences.com/CommonCore/ProviderID",
+      "relationType": "ReferenceId",
+      "required": true,
+      "isPrimaryId": false
+    },
+    {
+      "name": "product_id",
+      "type": "string",
+      "propertyUri": "https://properties.exactsciences.com/CommonCore/ProductId",
+      "relationType": "ReferenceId",
+      "required": true,
+      "isPrimaryId": false
+    },
+    {
+      "name": "order_source",
+      "type": "string",
+      "propertyUri": "https://properties.exactsciences.com/CommonCore/OrderSource",
+      "relationType": "ReferenceId",
+      "required": true,
+      "isPrimaryId": false
+    }
+  ]
+}

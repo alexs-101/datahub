@@ -1,0 +1,22 @@
+{
+  "dataProductId": "https://dataproducts.exactsciences.com/CommonCore/Domestic/CommonCoreOrder",
+  "name": "CommonCoreOrder",
+  "description" : "Common Core Order entity representing orders across Epic, PO SFDC, EU SFDC, PG LIMs, and SLIMS systems. Order Data includes both international and domestic orders.  Order data contains no PII or PHI.",
+  "version": "1.0",
+  "domain": "CommonCore",
+  "dataAlignmentType": "consumer-aligned",
+  "sourceSystems": ["Epic", "PO SFDC", "EU SFDC", "PG LIMs", "SLIMS"],
+  "processing": "batch",
+  "framework": "Databricks",	
+  "dataContract": "https://path.to/data-contracts/CommonCore/OrderContract.yaml",
+  "SLAs": "3-hour data refresh",
+  "useCases": ["DataAnalysis", "ExecutiveReporting"],
+  "subjectMatterExperts": ["avernon@exactsciences.com"],
+  "countryOfOrigin": ["Domestic", "EU"],
+  "dataClassification": "Internal",  
+  "complianceRequirements" : ["HIPPA"], 
+  "acceptableUse": "Research and Clinical Operations only",
+  "createdBy": "CommonCoreTeam",
+  "lastModified": "2023-03-15T10:00:00Z",
+  "updateFrequency": "Hourly"
+}

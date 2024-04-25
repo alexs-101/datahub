@@ -6,6 +6,7 @@ import pytest
 from freezegun import freeze_time
 
 from datahub.api.entities.dataproduct.dataproduct import DataProduct
+from datahub.api.entities.dataproduct.es_dataproduct import _EsDataProduct
 from datahub.metadata.schema_classes import DomainPropertiesClass
 from tests.test_helpers.graph_helpers import MockDataHubGraph
 from tests.test_helpers.mce_helpers import check_golden_file
@@ -79,6 +80,37 @@ def test_dataproduct_from_yaml(
     assert len(data_product.assets) == 3
 
     for mcp in data_product.generate_mcp(upsert=upsert):
+        mock_graph.emit(mcp)
+
+    output_file = Path(tmp_path / "test_dataproduct_out.json")
+    mock_graph.sink_to_file(output_file)
+    golden_file = Path(test_resources_dir / golden_filename)
+    check_golden_file(pytestconfig, output_file, golden_file)
+
+
+@freeze_time(FROZEN_TIME)
+@pytest.mark.parametrize(
+    "data_product_filename, upsert,golden_filename",
+    [
+        ("es_dataproduct.json", False, "golden_es_dataproduct_out.json"),
+        ("es_dataproduct_upsert.json", True, "golden_es_dataproduct_upsert_out.json"),
+    ],
+    ids=["update", "upsert"],
+)
+def test_dataproduct_from_es_json(
+    pytestconfig: pytest.Config,
+    test_resources_dir: Path,
+    tmp_path: Path,
+    base_mock_graph: MockDataHubGraph,
+    data_product_filename: str,
+    upsert: bool,
+    golden_filename: str,
+) -> None:
+    data_product_file = test_resources_dir / data_product_filename
+    mock_graph = base_mock_graph
+    data_product = _EsDataProduct.load_from_json(data_product_file)
+
+    for mcp in data_product.generate_mcp(mock_graph):
         mock_graph.emit(mcp)
 
     output_file = Path(tmp_path / "test_dataproduct_out.json")
