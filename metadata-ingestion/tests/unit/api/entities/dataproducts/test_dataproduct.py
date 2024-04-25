@@ -6,7 +6,7 @@ import pytest
 from freezegun import freeze_time
 
 from datahub.api.entities.dataproduct.dataproduct import DataProduct
-from datahub.api.entities.dataproduct.es_dataproduct import EsDataProduct
+from datahub.api.entities.dataproduct.es_dataproduct import _EsDataProduct
 from datahub.metadata.schema_classes import DomainPropertiesClass
 from tests.test_helpers.graph_helpers import MockDataHubGraph
 from tests.test_helpers.mce_helpers import check_golden_file
@@ -93,7 +93,7 @@ def test_dataproduct_from_yaml(
     "data_product_filename, upsert,golden_filename",
     [
         ("es_dataproduct.json", False, "golden_es_dataproduct_out.json"),
-        ("es_dataproduct_upsert.json", True, "golden_es_dataproduct_upsert_out.json")
+        ("es_dataproduct_upsert.json", True, "golden_es_dataproduct_upsert_out.json"),
     ],
     ids=["update", "upsert"],
 )
@@ -108,19 +108,15 @@ def test_dataproduct_from_es_json(
 ) -> None:
     data_product_file = test_resources_dir / data_product_filename
     mock_graph = base_mock_graph
-    data_product = EsDataProduct.from_es_json(data_product_file)
-    assert data_product.assets is not None
-    assert len(data_product.assets) == 1
+    data_product = _EsDataProduct.load_from_json(data_product_file)
 
-    for mcp in data_product.generate_mcp(upsert=upsert):
+    for mcp in data_product.generate_mcp(mock_graph):
         mock_graph.emit(mcp)
 
     output_file = Path(tmp_path / "test_dataproduct_out.json")
     mock_graph.sink_to_file(output_file)
     golden_file = Path(test_resources_dir / golden_filename)
     check_golden_file(pytestconfig, output_file, golden_file)
-    
-    pass
 
 
 @freeze_time(FROZEN_TIME)
